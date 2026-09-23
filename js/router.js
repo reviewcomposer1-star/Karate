@@ -34,10 +34,13 @@ window.KarateRouter = {
 
         let html;
         if (hash === '#home' || hash === '') { back?.classList.add('hidden'); html = this.renderHome(); }
+        else if (hash === '#introduction') { back?.classList.add('hidden'); html = window.KarateIntroductionUI.home(); }
+        else if (hash.startsWith('#introduction/')) { back?.classList.remove('hidden'); html = window.KarateIntroductionUI.section(decodeURIComponent(hash.split('/')[1])); }
         else if (hash === '#basics') { back?.classList.add('hidden'); html = this.renderBasics(); }
         else if (hash.startsWith('#category/')) { back?.classList.remove('hidden'); html = this.renderCategoryList(decodeURIComponent(hash.split('/')[1])); }
         else if (hash.startsWith('#technique/')) { back?.classList.remove('hidden'); html = this.renderTechniqueDetail(decodeURIComponent(hash.split('/')[1])); }
         else if (hash === '#kata') { back?.classList.add('hidden'); html = this.renderKata(); }
+        else if (hash.startsWith('#kata/')) { back?.classList.remove('hidden'); html = this.renderKataDetail(decodeURIComponent(hash.split('/')[1])); }
         else if (hash === '#kumite') { back?.classList.add('hidden'); html = this.renderKumite(); }
         else if (hash === '#favorites') { back?.classList.add('hidden'); html = this.renderFavorites(); }
         else { window.location.hash = '#home'; return; }
@@ -58,9 +61,10 @@ window.KarateRouter = {
             </div>
             <div class="home-section-head"><span>01</span><h2>Start here</h2></div>
             <div class="primary-grid">
-                <a href="#basics" class="primary-card basics-card"><span class="card-index">01</span><span class="card-kanji">基本</span><div><h3>Basics</h3><p>Techniques & foundations</p></div><span class="card-arrow">↗</span></a>
-                <a href="#kata" class="primary-card kata-card"><span class="card-index">02</span><span class="card-kanji">型</span><div><h3>Kata</h3><p>Forms & terminology</p></div><span class="card-arrow">↗</span></a>
-                <a href="#kumite" class="primary-card kumite-card"><span class="card-index">03</span><span class="card-kanji">組手</span><div><h3>Kumite</h3><p>Sparring fundamentals</p></div><span class="card-arrow">↗</span></a>
+                <a href="#introduction" class="primary-card introduction-card"><span class="card-index">01</span><span class="card-kanji">入門</span><div><h3>Introduction</h3><p>Enter the world of karate</p></div><span class="card-arrow">↗</span></a>
+                <a href="#basics" class="primary-card basics-card"><span class="card-index">02</span><span class="card-kanji">基本</span><div><h3>Basics</h3><p>Techniques & foundations</p></div><span class="card-arrow">↗</span></a>
+                <a href="#kata" class="primary-card kata-card"><span class="card-index">03</span><span class="card-kanji">型</span><div><h3>Kata</h3><p>Forms & terminology</p></div><span class="card-arrow">↗</span></a>
+                <a href="#kumite" class="primary-card kumite-card"><span class="card-index">04</span><span class="card-kanji">組手</span><div><h3>Kumite</h3><p>Sparring fundamentals</p></div><span class="card-arrow">↗</span></a>
             </div>
             <div class="home-note"><span class="note-dot"></span><span>Offline first · No account · No AI required</span></div>
         </section>`;
@@ -96,8 +100,109 @@ window.KarateRouter = {
         </section>`;
     },
     renderKata() {
-        const kata=window.KarateKata;
-        return `<section class="page-section"><div class="page-heading"><span class="eyebrow">型 · FORMS</span><h1>Kata</h1><p>A beginner’s introduction to forms, terminology and counting.</p></div><div class="detail-section"><span class="section-index">01</span><h2>${esc(kata.introduction.title)}</h2>${kata.introduction.content.map(p=>`<p>${esc(p)}</p>`).join('')}</div><div class="detail-section"><span class="section-index">02</span><h2>Terminology</h2><div class="term-list">${kata.terminology.map(term=>`<div class="term-row"><div><strong>${esc(term.term)}</strong><small>${esc(term.meaning)}</small></div><button class="sound-btn mini" type="button" onclick="window.KarateAudio.speak('${esc(term.term).replace(/'/g,"\\'")}')">${icon('speaker',16)}</button></div>`).join('')}</div></div><div class="detail-section"><span class="section-index">03</span><h2>Counting · 1—10</h2><div class="counting-grid">${kata.counting.map(c=>`<button class="count-card" type="button" onclick="window.KarateAudio.speak('${c.jp}')"><span>${c.num}</span><strong>${c.jp}</strong><small>${c.pronunciation}</small></button>`).join('')}</div></div></section>`;
+        const kata = window.KarateKata;
+        return `<section class="page-section">
+            <div class="page-heading">
+                <span class="eyebrow">型 · FORMS</span>
+                <h1>Kata</h1>
+                <p>A beginner's introduction to forms.</p>
+            </div>
+
+            <div class="detail-section">
+                <span class="section-index">01</span>
+                <h2>${esc(kata.introduction.title)}</h2>
+                ${kata.introduction.content.map(p => `<p>${esc(p)}</p>`).join('')}
+            </div>
+
+            <div class="detail-section">
+                <span class="section-index">02</span>
+                <h2>What Matters in Kata?</h2>
+                <div class="kata-matters-list">
+                    ${kata.introduction.matters.map(item => `
+                        <div class="kata-matter-row">
+                            <strong>${esc(item.title)}</strong>
+                            <p>${esc(item.desc)}</p>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <span class="section-index">03</span>
+                <h2>Katas</h2>
+                <div class="kata-list">
+                    ${kata.katas.map(k => `
+                        <a class="kata-card" href="#kata/${encodeURIComponent(k.id)}">
+                            <div>
+                                <span class="eyebrow">KATA</span>
+                                <h3>${esc(k.name)}</h3>
+                            </div>
+                            <span class="card-arrow">↗</span>
+                        </a>
+                    `).join('')}
+                </div>
+            </div>
+        </section>`;
+    },
+
+    renderKataDetail(kataId) {
+        const kata = window.KarateKata?.katas?.find(k => k.id === kataId);
+        if (!kata) {
+            return '<div class="empty-state"><strong>Kata not found.</strong><p>The link may be outdated.</p></div>';
+        }
+
+        const embedUrl = kata.videoUrl
+            .replace('https://www.youtube.com/watch?v=', 'https://www.youtube.com/embed/')
+            .replace('https://youtube.com/watch?v=', 'https://www.youtube.com/embed/');
+
+        return `<section class="detail-view">
+            <a href="#kata" class="intro-back-link">← Back to Kata</a>
+
+            <div class="page-heading">
+                <span class="eyebrow">型 · KATA</span>
+                <h1>${esc(kata.name)}</h1>
+                <p>${esc(kata.introduction)}</p>
+            </div>
+
+            <div class="kata-video-card">
+                <div class="kata-video-frame">
+                    <iframe
+                        src="${esc(embedUrl)}?rel=0&modestbranding=1&playsinline=1"
+                        title="${esc(kata.name)} Kata video"
+                        loading="lazy"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen></iframe>
+                </div>
+                <div class="kata-video-note">Video requires an internet connection.</div>
+            </div>
+
+            <div class="detail-section">
+                <span class="section-index">01</span>
+                <h2>Techniques Used</h2>
+                <div class="kata-technique-list">
+                    ${kata.techniques.map(t => `
+                        <div class="kata-technique-row">
+                            <strong>${esc(t.name)}</strong>
+                            <small>${esc(t.type)}</small>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <span class="section-index">02</span>
+                <h2>Common Tips</h2>
+                <ul>${kata.tips.map(x => `<li>${esc(x)}</li>`).join('')}</ul>
+            </div>
+
+            <div class="detail-section">
+                <span class="section-index">03</span>
+                <h2>Common Mistakes</h2>
+                <ul>${kata.commonMistakes.map(x => `<li>${esc(x)}</li>`).join('')}</ul>
+            </div>
+
+            <div class="style-note">Use your sensei's instruction when the details of your dojo's Junino sequence differ from this reference.</div>
+        </section>`;
     },
     renderKumite() {
         const k=window.KarateKumite;
