@@ -49,20 +49,14 @@
  .intro-counting-grid{grid-template-columns:repeat(5,minmax(0,1fr))}
 }
 
-/* KATA */
-.kata-matters-list{display:flex;flex-direction:column;gap:0}
-.kata-matter-row{padding:13px 0;border-bottom:1px solid var(--border)}
-.kata-matter-row strong{display:block;font-size:14px}
-.kata-matter-row p{margin:4px 0 0;color:var(--muted);font-size:13px;line-height:1.6}
-.kata-list{display:grid;gap:10px}
-.kata-card{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px;border:1px solid var(--border);border-radius:18px;background:var(--surface);transition:.18s ease}
-.kata-card:hover{background:var(--surface-2);border-color:rgba(215,255,79,.28);transform:translateY(-1px)}
-.kata-card h3{margin:6px 0 0;font-size:22px}
-.kata-video-card{margin:4px 0 28px}
-.kata-video-frame{position:relative;width:100%;aspect-ratio:16/9;border:1px solid var(--border);border-radius:22px;overflow:hidden;background:#050607;box-shadow:var(--shadow)}
-.kata-video-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-.kata-video-note{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.08em;margin-top:9px}
-.kata-technique-list{display:grid;gap:8px}
-.kata-technique-row{padding:13px 15px;border:1px solid var(--border);border-radius:15px;background:var(--surface)}
-.kata-technique-row strong{display:block;font-size:14px}
-.kata-technique-row small{display:block;color:var(--muted);font-size:11px;margin-top:4px}
+
+/* KATA LIST — scoped so the Home Start Here card keeps the same design as Basics/Introduction/Kumite */
+.kata-list .kata-card{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px;border:1px solid var(--border);border-radius:18px;background:var(--surface);transition:.18s ease}
+.kata-list .kata-card:hover{background:var(--surface-2);border-color:rgba(215,255,79,.28);transform:translateY(-1px)}
+.kata-list .kata-card h3{margin:6px 0 0;font-size:22px}
+
+/* HOME KATA CARD — same visual system as the other Start Here cards */
+.primary-card.kata-card{min-height:230px;padding:20px;border:1px solid var(--border);border-radius:var(--radius);background:linear-gradient(145deg,var(--surface-2),var(--surface));display:flex;flex-direction:column;align-items:stretch;justify-content:space-between;overflow:hidden;transition:.22s ease}
+.primary-card.kata-card:hover{transform:translateY(-4px);border-color:rgba(215,255,79,.28);box-shadow:var(--shadow);background:linear-gradient(145deg,var(--surface-2),var(--surface))}
+.primary-card.kata-card h3{margin:0;font-size:24px;letter-spacing:-.03em}
+.primary-card.kata-card p{margin:5px 0 0;color:var(--muted);font-size:12px}
